@@ -40,7 +40,6 @@ def better_print_nearby(nearby):
 journal_dir = os.path.expanduser(r"~\Saved Games\Frontier Developments\Elite Dangerous")
 
 latest_file = get_latest_journal(journal_dir)
-print(f"Reading latest journal: {latest_file}")
 
 ed_running = False
 if latest_file:
@@ -72,8 +71,18 @@ if latest_file:
             latest_file = new_latest_file
             ed_running = True
             print("Detected new journal file!")
+else:
+    print(f"Found no journals inside directory {journal_dir}")
+    ed_running = False
+    while not ed_running:
+        time.sleep(5)
+        latest_file = get_latest_journal(journal_dir)
+        if latest_file:
+            ed_running = True
+            print("Detected new journal file!")
 
 if latest_file:
+    print(f"Reading latest journal: {latest_file}")
     with open(latest_file, "r", encoding="utf-8") as f:
         # Move to the end of the file to read only new events (tail)
         f.seek(0, os.SEEK_END)
